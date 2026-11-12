@@ -16,9 +16,10 @@
     "0": "Appliances",
     "1": "Civil",
     "2": "Electrical",
-    "3": "HVAC",
-    "4": "Plumbing",
-    "5": "Security"
+    "3": "Electricity",
+    "4": "HVAC",
+    "5": "Plumbing",
+    "6": "Security"
   },
   "initializer_range": 0.02,
   "intermediate_size": 3072,
@@ -27,9 +28,10 @@
     "Appliances": 0,
     "Civil": 1,
     "Electrical": 2,
-    "HVAC": 3,
-    "Plumbing": 4,
-    "Security": 5
+    "Electricity": 3,
+    "HVAC": 4,
+    "Plumbing": 5,
+    "Security": 6
   },
   "layer_norm_eps": 1e-12,
   "max_position_embeddings": 512,
@@ -42,6 +44,6 @@
   "tie_word_embeddings": true,
   "transformers_version": "5.22.2",
   "type_vocab_size": 2,
-  "use_cache": true,
+  "use_cache": false,
   "vocab_size": 28996
 }
