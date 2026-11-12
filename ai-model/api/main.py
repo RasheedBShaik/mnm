@@ -2,7 +2,7 @@
 import torch
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -31,14 +31,20 @@ model.eval()
 print("BERT model loaded successfully!")
 
 # Create API
-app = FastAPI(title="MNM Maintenance AI API")
+app = FastAPI(
+    title="MNM Maintenance AI API",
+    description="AI-powered maintenance complaint classification",
+    version="1.0.0"
+)
 
-# Allow frontend connections during development
+# CORS configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "http://localhost:5173"
+        # ADD YOUR FRONTEND DEV TUNNEL URL HERE
+        # "https://pzrvhx4s-3000.inc1.devtunnels.ms",
+                
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -56,7 +62,8 @@ class ComplaintRequest(BaseModel):
 def home():
     return {
         "message": "MNM AI API is running",
-        "model_loaded": True
+        "model_loaded": True,
+        "device": str(DEVICE)
     }
 
 
@@ -67,7 +74,10 @@ def predict(request: ComplaintRequest):
     complaint = request.complaint.strip()
 
     if not complaint:
-        return {"error": "Complaint cannot be empty"}
+        raise HTTPException(
+            status_code=400,
+            detail="Complaint cannot be empty"
+        )
 
     inputs = tokenizer(
         complaint,
