@@ -17,4 +17,4 @@ node_modules/
 out/
 
 # Temporary files
-*.log
+*.logai-model/models/maintenance-bert/model.safetensors

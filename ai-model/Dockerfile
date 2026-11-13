@@ -2,12 +2,12 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-# Copy and install requirements
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy your entire project (including your 414MB models/ folder) into the cloud server
 COPY . .
 
-# Start the FastAPI app
+# Automatically reassemble model parts into model.safetensors during build
+RUN cat models/maintenance-bert/model_part_* > models/maintenance-bert/model.safetensors
+
 CMD sh -c "uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}"
