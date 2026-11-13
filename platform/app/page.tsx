@@ -5,21 +5,21 @@ import { useEffect, useState } from "react";
 const API_URLS: string[] = JSON.parse(
   process.env.NEXT_PUBLIC_API_URLS || "[]"
 );
+function getApiUrl() {
+  const isLocal =
+    typeof window !== "undefined" &&
+    ["localhost", "127.0.0.1"].includes(window.location.hostname);
 
-const IS_LOCAL =
-  typeof window !== "undefined" &&
-  ["localhost", "127.0.0.1"].includes(window.location.hostname);
+  const url = isLocal
+    ? API_URLS.find((url) => url.includes("127.0.0.1"))
+    : API_URLS.find((url) => url.includes("railway.app"));
 
-const API_URL = IS_LOCAL
-  ? API_URLS.find((url) => url.includes("127.0.0.1")) ||
-    "http://127.0.0.1:8000"
-  : API_URLS.find((url) => url.includes("railway.app")) ||
-    "https://mnm-production-de44b4b8.up.railway.app";
-
-// Normalize the URL and ensure it has a protocol.
-const BASE_URL = API_URL.startsWith("http")
-  ? API_URL
-  : `https://${API_URL}`;
+  return (url || "https://mnm-production-de44b4b8.up.railway.app")
+    .replace(/\/+$/, "")
+    .replace(/^http:\/\//, "http://")
+    .replace(/^https:\/\//, "https://");
+}
+  
 interface Prediction {
   complaint: string;
   category: string;
@@ -83,7 +83,7 @@ export default function Home() {
     setDatasetError("");
 
     try {
-      const response = await fetch(`${API_URL}/dataset/info`, {
+      const response = await fetch(`${getApiUrl()}/dataset/info`, {
         cache: "no-store",
       });
 
@@ -129,7 +129,7 @@ export default function Home() {
     setPrediction(null);
 
     try {
-      const response = await fetch(`${API_URL}/predict`, {
+      const response = await fetch(`${getApiUrl()}/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ complaint: complaint.trim() }),
@@ -253,7 +253,7 @@ export default function Home() {
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       const response = await fetch(
-        `${API_URL}/train/progress/${encodeURIComponent(id)}`,
+        `${getApiUrl()}/train/progress/${encodeURIComponent(id)}`,
         { cache: "no-store" },
       );
 
@@ -337,7 +337,7 @@ export default function Home() {
         formData.append("file", file);
       }
 
-      const response = await fetch(`${API_URL}/train`, {
+      const response = await fetch(`${getApiUrl()}/train`, {
         method: "POST",
         body: formData,
       });

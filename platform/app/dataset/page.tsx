@@ -9,13 +9,20 @@ const API_URLS: string[] = JSON.parse(
   process.env.NEXT_PUBLIC_API_URLS || "[]"
 );
 
-const API_URL =
+const IS_LOCAL =
   typeof window !== "undefined" &&
-  (window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1")
-    ? API_URLS[1]
-    : API_URLS[0];
-    
+  ["localhost", "127.0.0.1"].includes(window.location.hostname);
+
+const API_URL = IS_LOCAL
+  ? API_URLS.find((url) => url.includes("127.0.0.1")) ||
+    "http://127.0.0.1:8000"
+  : API_URLS.find((url) => url.includes("railway.app")) ||
+    "https://mnm-production-de44b4b8.up.railway.app";
+
+const BASE_URL = API_URL.startsWith("http")
+  ? API_URL
+  : `https://${API_URL}`;
+
 interface DatasetRecord {
   id: number;
   text: string;
@@ -74,7 +81,7 @@ export default function DatasetPage() {
       });
 
       const response = await fetch(
-        `${API_URL}/dataset/records?${params.toString()}`,
+        `${BASE_URL}/dataset/records?${params.toString()}`,
         { cache: "no-store" }
       );
 
@@ -131,7 +138,7 @@ export default function DatasetPage() {
 
     try {
       const response = await fetch(
-        `${API_URL}/dataset/records/${id}`,
+        `${BASE_URL}/dataset/records/${id}`,
         {
           method: "PUT",
           headers: {
@@ -174,7 +181,7 @@ export default function DatasetPage() {
 
     try {
       const response = await fetch(
-        `${API_URL}/dataset/records/${id}`,
+        `${BASE_URL}/dataset/records/${id}`,
         {
           method: "DELETE",
         }
