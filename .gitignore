@@ -16,8 +16,5 @@ node_modules/
 .next/
 out/
 
-# Model files (large trained weights)
-ai-model/models/maintenance-bert/*.safetensors
-
 # Temporary files
 *.log
