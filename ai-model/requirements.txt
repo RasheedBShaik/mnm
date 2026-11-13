@@ -1,3 +1,6 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.15.0
+transformers==5.22.2
 annotated-doc==0.0.6
 annotated-types==0.8.0
 anyio==4.16.0
@@ -32,11 +35,11 @@ shellingham==1.5.4
 starlette==1.10.0
 sympy==1.14.0
 tokenizers==0.23.3
-torch==2.15.0
 tqdm==4.70.1
-transformers==5.22.2
 truststore==0.10.5
 typer==0.29.1
 typing-inspection==0.4.5
 typing_extensions==4.16.0
 uvicorn==0.54.0
+python-dotenv
+python-multipart
