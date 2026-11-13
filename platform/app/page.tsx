@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
 const API_URLS: string[] = JSON.parse(
   process.env.NEXT_PUBLIC_API_URLS || "[]"
 );
@@ -12,15 +11,15 @@ const IS_LOCAL =
   ["localhost", "127.0.0.1"].includes(window.location.hostname);
 
 const API_URL = IS_LOCAL
-  ? API_URLS[1]
-  : API_URLS[0];
+  ? API_URLS.find((url) => url.includes("127.0.0.1")) ||
+    "http://127.0.0.1:8000"
+  : API_URLS.find((url) => url.includes("railway.app")) ||
+    "https://mnm-production-de44b4b8.up.railway.app";
 
-if (!API_URL) {
-  throw new Error("API URL is not configured correctly");
-}
-
-// console.log("Selected API:", API_URL);
-
+// Normalize the URL and ensure it has a protocol.
+const BASE_URL = API_URL.startsWith("http")
+  ? API_URL
+  : `https://${API_URL}`;
 interface Prediction {
   complaint: string;
   category: string;

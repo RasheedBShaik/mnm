@@ -18,3 +18,4 @@ out/
 
 # Temporary files
 *.logai-model/models/maintenance-bert/model.safetensors
+ai-model/models/maintenance-bert/model.safetensors
