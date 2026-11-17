@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { BrainCircuit} from "lucide-react";
 
 const API_URLS: string[] = JSON.parse(process.env.NEXT_PUBLIC_API_URLS || "[]");
 
@@ -15,6 +16,7 @@ interface Prediction {
   complaint: string;
   category: string;
   confidence: number;
+
 }
 
 const categories = [
@@ -74,13 +76,17 @@ export default function Home() {
 
         {/* Header */}
         <header className="mb-10 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-2xl text-white shadow-lg shadow-blue-200">✦</div>
-          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">MNM AI Classifier</h1>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-500 sm:text-base">
-            Intelligent Maintenance Complaint Classification using Natural Language Processing and BERT.
-          </p>
-        </header>
+  <div className="mb-4 flex items-center justify-center gap-3">
+    <BrainCircuit size={30} className="text-blue-600" strokeWidth={2} />
+    <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
+      MNM AI Classifier
+    </h1>
+  </div>
 
+  <p className="mx-auto max-w-xl text-sm leading-6 text-slate-500 sm:text-base">
+    Intelligent Maintenance Complaint Classification using Natural Language Processing and BERT.
+  </p>
+</header>
         {/* Project Overview */}
         <section className="mb-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-xl font-bold">Project Overview</h2>
@@ -203,7 +209,6 @@ export default function Home() {
           >
             {predicting ? "Analyzing Text..." : "✦  Classify Complaint"}
           </button>
-
           {error && <p className="mt-4 rounded-xl bg-red-50 p-4 text-sm text-red-700">{error}</p>}
 
           {prediction && (
